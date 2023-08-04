@@ -4,238 +4,7 @@
 if (localStorage.getItem("reset_4") == undefined) {
     localStorage.setItem("reset_4", "1");
     // 清空之前的标记值
-    for (var i = 1; i <= 3; i++) {
-      localStorage.removeItem("reset_" + i);
-    }
-    clearItem();
-    setTimeout(function () {
-      new Vue({
-        data: function () {
-          this.$notify({
-            title: "提示🍒",
-            message: " (｡･∀･)ﾉﾞ由于网站部分设置项更新，当前已为您重置所有设置，祝您愉快！",
-            position: 'top-left',
-            offset: 50,
-            showClose: true,
-            type: "success",
-            duration: 8000
-          });
-        }
-      })
-    }, 1500);
-  }
-  
-  // 清除localStorage配置项
-  function clearItem() {
-    localStorage.removeItem('blogbg');
-    localStorage.removeItem('universe');
-    localStorage.removeItem('blur');
-    localStorage.removeItem('fpson');
-    localStorage.removeItem('transNum');
-    localStorage.removeItem('blurRad');
-    localStorage.removeItem('font');
-    localStorage.removeItem('themeColor');
-    localStorage.removeItem('rs');
-    localStorage.removeItem('mouse');
-    localStorage.removeItem('light');
-    localStorage.removeItem('snow');
-  }
-  
-  
-  // 设置字体
-  if (localStorage.getItem("font") == undefined) {
-    localStorage.setItem("font", "LXGW");
-  }
-  setFont(localStorage.getItem("font"));
-  function setFont(n) {
-    localStorage.setItem("font", n)
-    if (n == "default") {
-      document.documentElement.style.setProperty('--global-font', '-apple-system');
-      document.body.style.fontFamily = "-apple-system, Consolas_1, BlinkMacSystemFont, 'Segoe UI' , 'Helvetica Neue' , Lato, Roboto, 'PingFang SC' , 'Microsoft JhengHei' , 'Microsoft YaHei' , sans-serif";
-    }
-    else {
-      document.documentElement.style.setProperty('--global-font', n);
-      document.body.style.fontFamily = "var(--global-font),-apple-system, IBM Plex Mono ,monosapce,'微软雅黑', sans-serif";
-    }
-    try { setFontBorder(); } catch (err) { };
-  }
-  
-  // 设置字体选择框边界
-  function setFontBorder() {
-    var curFont = localStorage.getItem("font");
-    var swfId = "swf_" + curFont;
-    document.getElementById(swfId).style.border = "2px solid var(--theme-color)";
-    Array.prototype.forEach.call(document.getElementsByClassName("swf"), function (ee) {
-      if (ee.id != swfId) ee.style.border = "2px solid var(--border-color)";
-    });
-  }
-  
-  
-  // 设置主题色
-  if (localStorage.getItem("themeColor") == undefined) {
-    localStorage.setItem("themeColor", "green");
-  }
-  setColor(localStorage.getItem("themeColor"));
-  function setColor(c) {
-    document.getElementById("themeColor").innerText = `:root{--theme-color:` + map.get(c) + ` !important}`;
-    localStorage.setItem("themeColor", c);
-    // 刷新鼠标颜色
-    CURSOR.refresh();
-    // 设置一个带有透明度的主题色，用于菜单栏的悬浮颜色
-    var theme_color = map.get(c);
-    var trans_theme_color = "rgba" + theme_color.substring(3, theme_color.length - 1) + ", 0.7)";
-    var high_trans_color = "rgba" + theme_color.substring(3, theme_color.length - 1) + ", 0.5)";
-    document.documentElement.style.setProperty("--text-bg-hover", trans_theme_color);
-    document.documentElement.style.setProperty("--high-trans-color", high_trans_color);
-  }
-  
-  
-  // 星空背景开关
-  if (localStorage.getItem("universe") == undefined) {
-    localStorage.setItem("universe", "block");
-  }
-  setUniverse2(localStorage.getItem("universe"));
-  function setUniverse2(c) {
-    document.getElementById("universe").style.display = c;
-    localStorage.setItem("universe", c);
-  }
-  function setUniverse() {
-    if (document.getElementById("universeSet").checked) {
-      setUniverse2("block");
-    } else {
-      setUniverse2("none");
-    }
-  }
-  
-  // 雪花开关
-  if (localStorage.getItem("snow") == undefined) {
-    localStorage.setItem("snow", "none");
-  }
-  document.getElementById("snow").style.display = localStorage.getItem("snow");
-  function setSnow() {
-    if (document.getElementById("snowSet").checked) {
-      document.getElementById("snow").style.display = "block";
-      localStorage.setItem("snow", "block");
-    } else {
-      document.getElementById("snow").style.display = "none";
-      localStorage.setItem("snow", "none");
-    }
-  }
-  
-  
-  // 帧率监测开关
-  if (localStorage.getItem("fpson") == undefined) {
-    localStorage.setItem("fpson", "1");
-  }
-  function fpssw() {
-    if (document.getElementById("fpson").checked) {
-      localStorage.setItem("fpson", "1");
-    } else {
-      localStorage.setItem("fpson", "0");
-    }
-    setTimeout(reload, 600);
-  }
-  
-  // 刷新窗口
-  function reload() {
-    window.location.reload();
-  }
-  
-  // 侧边栏开关
-  if (localStorage.getItem("rs") == undefined) {
-    localStorage.setItem("rs", "block");
-  }
-  if (localStorage.getItem("rs") == "block") {
-    document.getElementById("rightSide").innerText = `:root{--rightside-display: block}`;
-  } else {
-    document.getElementById("rightSide").innerText = `:root{--rightside-display: none}`;
-  }
-  function toggleRightside() {
-    // 先设置localStorage变量
-    if (document.getElementById("rightSideSet").checked) {
-      localStorage.setItem("rs", "block");
-      document.getElementById("rightSide").innerText = `:root{--rightside-display: block}`;
-    } else {
-      localStorage.setItem("rs", "none");
-      document.getElementById("rightSide").innerText = `:root{--rightside-display: none}`;
-    }
-  }
-  
-  
-  // 透明度调节滑块
-  if (localStorage.getItem("transNum") == undefined) {
-    localStorage.setItem("transNum", 95);
-  }
-  var curTransNum = localStorage.getItem("transNum");
-  var curTransMini = curTransNum * 0.95;
-  document.getElementById("transPercent").innerText = `:root{--trans-light: rgba(253, 253, 253, ${curTransNum}%) !important; --trans-dark: rgba(25, 25, 25, ${curTransNum}%) !important} `;
-  function setTrans() {
-    var elem = document.getElementById("transSet");
-    var newTransNum = elem.value;
-    var target = document.querySelector('.transValue');
-    target.innerHTML = "透明度 (0%-100%): " + newTransNum + "%";
-    localStorage.setItem("transNum", newTransNum);
-    curTransMini = newTransNum * 0.95;
-    curTransNum = newTransNum;  // 更新当前透明度
-    document.querySelector('#rang_trans').style.width = curTransMini + "%";
-    document.getElementById("transPercent").innerText = `:root{--trans-light: rgba(253, 253, 253, ${newTransNum}%) !important; --trans-dark: rgba(25, 25, 25, ${newTransNum}%) !important} `;
-  };
-  
-  
-  // 模糊度调节滑块
-  if (localStorage.getItem("blurRad") == undefined) {
-    localStorage.setItem("blurRad", 20);
-  }
-  var curBlur = localStorage.getItem("blurRad"); // 当前模糊半径
-  var miniBlur = curBlur * 0.95;
-  document.getElementById("blurNum").innerText = `:root{--blur-num: blur(${curBlur}px) saturate(120%) !important`;
-  function setBlurNum() {
-    var elem = document.getElementById("blurSet");
-    var newBlur = elem.value;
-    var target = document.querySelector('.blurValue');
-    target.innerHTML = "模糊半径 (开启模糊生效 0px-100px): " + newBlur + "px";
-    localStorage.setItem("blurRad", newBlur);
-    curBlur = newBlur;
-    miniBlur = curBlur * 0.95;
-    // var max = elem.getAttribute("max");
-    document.querySelector('#rang_blur').style.width = miniBlur + "%";
-    document.getElementById("blurNum").innerText = `:root{--blur-num: blur(${curBlur}px) saturate(120%) !important`;
-  };
-  
-  
-  // 模糊效果开关
-  if (localStorage.getItem("blur") == undefined) {
-    localStorage.setItem("blur", 0);
-  }
-  if (localStorage.getItem("blur") == 0) {
-    document.getElementById("settingStyle").innerText = `:root{--backdrop-filter: none}`;
-  } else {
-    document.getElementById("settingStyle").innerText = `:root{--backdrop-filter: var(--blur-num)}`;
-  }
-  function setBlur() {
-    if (document.getElementById("blur").checked) {
-      localStorage.setItem("blur", 1);
-      document.getElementById("settingStyle").innerText = `:root{--backdrop-filter: var(--blur-num)}`;
-    } else {
-      localStorage.setItem("blur", 0);
-      document.getElementById("settingStyle").innerText = `:root{--backdrop-filter: none}`;
-    }
-  }
-  
-  // 更换背景(原来Leonus的代码)
-  // 存数据
-  // name：命名 data：数据
-  // function saveData(name, data) {
-  //   localStorage.setItem(name, JSON.stringify({ time: Date.now(), data: data }));
-  // }
-  // 取数据
-  // name：命名 time：过期时长,单位分钟,如传入30,即加载数据时如果超出30分钟返回0,否则返回数据
-  // function loadData(name, time) {
-  //   let d = JSON.parse(localStorage.getItem(name));
-  //   // 过期或有错误返回 0 否则返回数据
-  //   if (d) {
-  //     let t = Date.now() - d.time;
-  //     if (t < time * 60 * 1000 && t > -1) return d.data;
+    for (var i = 1; i <= 0 60 1000 8000 3; i++) { localstorage.removeitem("reset_" + i); } clearitem(); settimeout(function () new vue({ data: function this.$notify({ title: "提示🍒", message: " (｡･∀･)ﾉﾞ由于网站部分设置项更新，当前已为您重置所有设置，祝您愉快！", position: 'top-left', offset: 50, showclose: true, type: "success", duration: }); }) }, 1500); 清除localstorage配置项 clearitem() localstorage.removeitem('blogbg'); localstorage.removeitem('universe'); localstorage.removeitem('blur'); localstorage.removeitem('fpson'); localstorage.removeitem('transnum'); localstorage.removeitem('blurrad'); localstorage.removeitem('font'); localstorage.removeitem('themecolor'); localstorage.removeitem('rs'); localstorage.removeitem('mouse'); localstorage.removeitem('light'); localstorage.removeitem('snow'); 设置字体 if (localstorage.getitem("font")="=" undefined) localstorage.setitem("font", "lxgw"); setfont(localstorage.getitem("font")); setfont(n) n) (n="=" "default") document.documentelement.style.setproperty('--global-font', '-apple-system'); document.body.style.fontfamily="-apple-system, Consolas_1, BlinkMacSystemFont, 'Segoe UI' , 'Helvetica Neue' , Lato, Roboto, 'PingFang SC' , 'Microsoft JhengHei' , 'Microsoft YaHei' , sans-serif" ; else n); try setfontborder(); catch (err) }; 设置字体选择框边界 setfontborder() var curfont="localStorage.getItem("font");" swfid="swf_" curfont; document.getelementbyid(swfid).style.border="2px solid var(--theme-color)" array.prototype.foreach.call(document.getelementsbyclassname("swf"), (ee) (ee.id !="swfId)" ee.style.border="2px solid var(--border-color)" 设置主题色 (localstorage.getitem("themecolor")="=" localstorage.setitem("themecolor", "green"); setcolor(localstorage.getitem("themecolor")); setcolor(c) document.getelementbyid("themecolor").innertext="`:root{--theme-color:`" map.get(c) ` !important}`; c); 刷新鼠标颜色 cursor.refresh(); 设置一个带有透明度的主题色，用于菜单栏的悬浮颜色 theme_color="map.get(c);" trans_theme_color="rgba" theme_color.substring(3, theme_color.length - 1) ", 0.7)"; high_trans_color="rgba" 0.5)"; document.documentelement.style.setproperty("--text-bg-hover", trans_theme_color); document.documentelement.style.setproperty("--high-trans-color", high_trans_color); 星空背景开关 (localstorage.getitem("universe")="=" localstorage.setitem("universe", "block"); setuniverse2(localstorage.getitem("universe")); setuniverse2(c) document.getelementbyid("universe").style.display="c;" setuniverse() (document.getelementbyid("universeset").checked) setuniverse2("block"); setuniverse2("none"); 雪花开关 (localstorage.getitem("snow")="=" localstorage.setitem("snow", "none"); document.getelementbyid("snow").style.display="localStorage.getItem("snow");" setsnow() (document.getelementbyid("snowset").checked) 帧率监测开关 (localstorage.getitem("fpson")="=" localstorage.setitem("fpson", "1"); fpssw() (document.getelementbyid("fpson").checked) "0"); settimeout(reload, 600); 刷新窗口 reload() window.location.reload(); 侧边栏开关 (localstorage.getitem("rs")="=" localstorage.setitem("rs", "block") document.getelementbyid("rightside").innertext="`:root{--rightside-display:" block}`; none}`; togglerightside() 先设置localstorage变量 (document.getelementbyid("rightsideset").checked) 透明度调节滑块 (localstorage.getitem("transnum")="=" localstorage.setitem("transnum", 95); curtransnum="localStorage.getItem("transNum");" curtransmini="curTransNum" * 0.95; document.getelementbyid("transpercent").innertext="`:root{--trans-light:" rgba(253, 253, ${curtransnum}%) !important; --trans-dark: rgba(25, 25, !important} `; settrans() elem="document.getElementById("transSet");" newtransnum="elem.value;" target="document.querySelector('.transValue');" target.innerhtml="透明度 (0%-100%): " "%"; newtransnum); 更新当前透明度 document.queryselector('#rang_trans').style.width="curTransMini" ${newtransnum}%) 模糊度调节滑块 (localstorage.getitem("blurrad")="=" localstorage.setitem("blurrad", 20); curblur="localStorage.getItem("blurRad");" 当前模糊半径 miniblur="curBlur" document.getelementbyid("blurnum").innertext="`:root{--blur-num:" blur(${curblur}px) saturate(120%) !important`; setblurnum() newblur="elem.value;" "px"; newblur); max="elem.getAttribute("max");" document.queryselector('#rang_blur').style.width="miniBlur" 模糊效果开关 (localstorage.getitem("blur")="=" localstorage.setitem("blur", 0); 0) document.getelementbyid("settingstyle").innertext="`:root{--backdrop-filter:" var(--blur-num)}`; setblur() (document.getelementbyid("blur").checked) 1); 更换背景(原来leonus的代码) 存数据 name：命名 data：数据 savedata(name, data) localstorage.setitem(name, json.stringify({ time: date.now(), data })); 取数据 time：过期时长,单位分钟,如传入30,即加载数据时如果超出30分钟返回0,否则返回数据 loaddata(name, time) let d="JSON.parse(localStorage.getItem(name));" 过期或有错误返回 否则返回数据 (d) t="Date.now()" d.time; (t < time &&> -1) return d.data;
   //   }
   //   return 0;
   // }
@@ -271,62 +40,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   }
   
   // 必应每日壁纸API
-  let bingDayBg = screen.width <= 768 ? "url(https://bing.img.run/m.php)" : "url(https://bing.img.run/1920x1080.php)";
-  // 必应历史壁纸API
-  let bingHistoryBg = screen.width <= 768 ? "url(https://bing.img.run/rand_m.php)" : "url(https://bing.img.run/rand.php)";
-  // EEE.DOG
-  let EEEDog = "url(https://api.yimian.xyz/img?type=moe&size=1920x1080)";
-  // 随机美图cdn.seovx.com
-  let seovx = "url(https://cdn.seovx.com/?mom=302)";
-  // picsum随机
-  let picsum = "url(https://picsum.photos/1920/1080.webp)";
-  // 小歪二次元
-  // let waiDongman = "url(https://api.ixiaowai.cn/api/api.php)";
-  //  小歪高清壁纸
-  let waiBizhi = "url(https://api.ixiaowai.cn/gqapi/gqapi.php)";
-  // 博天随机
-  let btstu = "url(http://api.btstu.cn/sjbz/?lx=suiji)";
-  // tuapi 动漫
-  // let tuapi = "url(https://tuapi.eees.cc/api.php?category=dongman)";
-  // unsplash随机 https://source.unsplash.com/random/1920x1080/daily (weekly)
-  let unsplash = "url(https://source.unsplash.com/random/1920x1080/)";
-  
-  
-  // 更换背景(自己的代码)
-  if (localStorage.getItem("blogbg") != undefined) {
-    setBg(localStorage.getItem("blogbg"));
-  } else {
-    document.getElementById("defineBg").innerText = `:root{
-      --default-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/dm14.webp);
-      --darkmode-bg:url(https://lskypro.acozycotage.net/Fomalhaut/img/yuanshen1.webp);
-      --mobileday-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/snow.webp);
-      --mobilenight-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/mb8.webp);
-    }`;
-  }
-  // 切换背景主函数
-  function changeBg(s) {
-    // 自定义颜色框
-    defineColor = s.charAt(0) == "#" ? s : '#F4D88A';
-    setBg(s);
-    localStorage.setItem("blogbg", s);
-  }
-  // 设置背景属性
-  function setBg(s) {
-    document.getElementById("defineBg").innerText = `:root{
-      --default-bg: ${s};
-      --darkmode-bg: ${s};
-      --mobileday-bg: ${s};
-      --mobilenight-bg: ${s};
-    }`;
-  }
-  
-  // 切换链接对应的背景(加入了链接检验与防抖)
-  function getPicture() {
-    debounce(getPicture_, 300);
-  }
-  
-  function getPicture_() {
-    checkImgExists(document.getElementById("pic-link").value).then(() => {
+  let bingDayBg = screen.width <= 768 ? "url(https: bing.img.run m.php)" : 1920x1080.php)"; 必应历史壁纸api let binghistorybg="screen.width" <="768" rand_m.php)" rand.php)"; eee.dog eeedog="url(https://api.yimian.xyz/img?type=moe&size=1920x1080)" ; 随机美图cdn.seovx.com seovx="url(https://cdn.seovx.com/?mom=302)" picsum随机 picsum="url(https://picsum.photos/1920/1080.webp)" 小歪二次元 waidongman="url(https://api.ixiaowai.cn/api/api.php)" 小歪高清壁纸 waibizhi="url(https://api.ixiaowai.cn/gqapi/gqapi.php)" 博天随机 btstu="url(http://api.btstu.cn/sjbz/?lx=suiji)" tuapi 动漫 unsplash随机 https: source.unsplash.com random 1920x1080 daily (weekly) unsplash="url(https://source.unsplash.com/random/1920x1080/)" 更换背景(自己的代码) if (localstorage.getitem("blogbg") !="undefined)" { setbg(localstorage.getitem("blogbg")); } else document.getelementbyid("definebg").innertext="`:root{" --default-bg: url(https: lskypro.acozycotage.net fomalhaut img dm14.webp); --darkmode-bg:url(https: yuanshen1.webp); --mobileday-bg: snow.webp); --mobilenight-bg: mb8.webp); }`; 切换背景主函数 function changebg(s) 自定义颜色框 definecolor="s.charAt(0)" =="#" s '#f4d88a'; setbg(s); localstorage.setitem("blogbg", s); 设置背景属性 setbg(s) ${s}; --darkmode-bg: 切换链接对应的背景(加入了链接检验与防抖) getpicture() debounce(getpicture_, 300); getpicture_() checkimgexists(document.getelementbyid("pic-link").value).then(()> {
       // 有效的图片链接
       var link = "url(" + document.getElementById("pic-link").value + ")";
       changeBg(link);
@@ -470,7 +184,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   
   <div class="transValue" style="font-weight:bold;padding-left:10px">透明度 (0%-100%): ${curTransNum}%</div>
   <div class="range">
-    <input id="transSet" type="range" min="0" max="100" step="1" value=${curTransNum} oninput="setTrans()">
+    <input id="transSet" type="range" min="0" max="100" step="1" value="${curTransNum}" oninput="setTrans()">
     <p class="rang_width" id="rang_trans" style="width:${curTransMini}%"></p>
   </div>
   
@@ -511,25 +225,14 @@ if (localStorage.getItem("reset_4") == undefined) {
   </p>
   
   <h2>三、主题色设置</h2>
-  <div class="content" style="display:flex"><input type="radio" id="red" name="colors" value=" "
-          onclick="setColor('red')"><input type="radio" id="orange" name="colors" value=" "
-          onclick="setColor('orange')"><input type="radio" id="yellow" name="colors" value=" "
-          onclick="setColor('yellow')"><input type="radio" id="green" name="colors" value=" "
-          onclick="setColor('green')"><input type="radio" id="blue" name="colors" value=" "
-          onclick="setColor('blue')"><input type="radio" id="heoblue" name="colors" value=" "
-          onclick="setColor('heoblue')"><input type="radio" id="darkblue" name="colors" value=" "
-          onclick="setColor('darkblue')"><input type="radio" id="purple" name="colors" value=" "
-          onclick="setColor('purple')"><input type="radio" id="pink" name="colors" value=" "
-          onclick="setColor('pink')" checked="checked"><input type="radio" id="black" name="colors" value=" "
-          onclick="setColor('black')"><input type="radio" id="blackgray" name="colors" value=" "
-          onclick="setColor('blackgray')"></div>
+  <div class="content" style="display:flex"><input type="radio" id="red" name="colors" value=" " onclick="setColor('red')"><input type="radio" id="orange" name="colors" value=" " onclick="setColor('orange')"><input type="radio" id="yellow" name="colors" value=" " onclick="setColor('yellow')"><input type="radio" id="green" name="colors" value=" " onclick="setColor('green')"><input type="radio" id="blue" name="colors" value=" " onclick="setColor('blue')"><input type="radio" id="heoblue" name="colors" value=" " onclick="setColor('heoblue')"><input type="radio" id="darkblue" name="colors" value=" " onclick="setColor('darkblue')"><input type="radio" id="purple" name="colors" value=" " onclick="setColor('purple')"><input type="radio" id="pink" name="colors" value=" " onclick="setColor('pink')" checked="checked"><input type="radio" id="black" name="colors" value=" " onclick="setColor('black')"><input type="radio" id="blackgray" name="colors" value=" " onclick="setColor('blackgray')"></div>
   
   <h2>四、背景设置</h2>
   <center><button onclick="resetBg()" style="background:var(--theme-color);display:block;width:35%;padding:15px 0;border-radius:30px;color:white;"><i class="fa-solid fa-arrows-rotate"></i>&nbsp;恢复默认背景</button></center>
   
   <h3>1. 二次元</h3>
   <details class="folding-tag" cyan><summary> 查看二次元背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)')"></a></div>
               </div>
             </details>
@@ -538,7 +241,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   <h3>2. 风景</h3>
   
   <details class="folding-tag" cyan><summary> 查看风景背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)')"></a></div>
               </div>
             </details>
@@ -546,14 +249,14 @@ if (localStorage.getItem("reset_4") == undefined) {
   <h3>3. 萌宠</h3>
   
   <details class="folding-tag" cyan><summary> 查看萌宠背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)')"></a></div>
               </div>
             </details>
   
   <h3>4. 渐变色</h3>
   <details class="folding-tag" cyan><summary> 查看渐变色背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to right, #544a7d, #ffd452)" onclick="changeBg('linear-gradient(to right, #544a7d, #ffd452)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)" onclick="changeBg('linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to left, #654ea3, #eaafc8)" onclick="changeBg('linear-gradient(to left, #654ea3, #eaafc8)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)" onclick="changeBg('linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #d3959b, #bfe6ba)" onclick="changeBg('linear-gradient(to top, #d3959b, #bfe6ba)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #8360c3, #2ebf91)" onclick="changeBg('linear-gradient(to top, #8360c3, #2ebf91)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #108dc7, #ef8e38)" onclick="changeBg('linear-gradient(to top, #108dc7, #ef8e38)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)" onclick="changeBg('linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)')"></a></div>
               </div>
             </details>
@@ -561,8 +264,8 @@ if (localStorage.getItem("reset_4") == undefined) {
   
   <h3>5. 纯色</h3>
   <details class="folding-tag" cyan><summary> 查看纯色背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ecb1b1" onclick="changeBg('#ecb1b1')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #d3ebac" onclick="changeBg('#d3ebac')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ace9ce" onclick="changeBg('#ace9ce')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #c1ebea" onclick="changeBg('#c1ebea')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #dee7f1" onclick="changeBg('#dee7f1')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #e9e3f2" onclick="changeBg('#e9e3f2')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #f7eff5" onclick="changeBg('#f7eff5')"></a>  <input type="color" id="define_colors" href="javascript:;" rel="noopener external nofollow" class="box" autocomplete="on" value="${defineColor}" oninput="changeBgColor()"></input></div>
+              <div class="content">
+              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ecb1b1" onclick="changeBg('#ecb1b1')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #d3ebac" onclick="changeBg('#d3ebac')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ace9ce" onclick="changeBg('#ace9ce')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #c1ebea" onclick="changeBg('#c1ebea')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #dee7f1" onclick="changeBg('#dee7f1')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #e9e3f2" onclick="changeBg('#e9e3f2')"></a> <a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #f7eff5" onclick="changeBg('#f7eff5')"></a>  <input type="color" id="define_colors" href="javascript:;" rel="noopener external nofollow" class="box" autocomplete="on" value="${defineColor}" oninput="changeBgColor()"></div>
               </div>
             </details>
   
@@ -570,7 +273,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   
   <h3>6. 适配手机</h3>
   <details class="folding-tag" cyan><summary> 查看适配手机的背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)" class="pimgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)')"></a></div>
               </div>
             </details>
@@ -578,7 +281,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   
   <h3>7. 壁纸API</h3>
   <details class="folding-tag" cyan><summary> 查看壁纸API系列背景 </summary>
-              <div class='content'>
+              <div class="content">
               <div class="bgbox"><a id="bingDayBox" rel="noopener external nofollow" style="background-image: ${bingDayBg}" class="box apiBox" onclick="changeBg('${bingDayBg}')"></a><a id="bingHistoryBox" rel="noopener external nofollow" style="background-image: ${bingHistoryBg}" class="box apiBox" onclick="changeBg('${bingHistoryBg}')"></a><a id="EEEDogBox" rel="noopener external nofollow" style="background-image: ${EEEDog}" class="box apiBox" onclick="changeBg('${EEEDog}')"></a><a id="seovxBox" rel="noopener external nofollow" style="background-image: ${seovx}" class="box apiBox" onclick="changeBg('${seovx}')"></a><a id="picsumBox" rel="noopener external nofollow" style="background-image: ${picsum}" class="box apiBox" onclick="changeBg('${picsum}')"></a><a id="waiBizhiBox" rel="noopener external nofollow" style="background-image: ${waiBizhi}" class="box apiBox" onclick="changeBg('${waiBizhi}')"></a><a id="btstuBox" rel="noopener external nofollow" style="background-image: ${btstu}" class="box apiBox" onclick="changeBg('${btstu}')"></a><a id="unsplashBox" rel="noopener external nofollow" style="background-image: ${unsplash}" class="box apiBox" onclick="changeBg('${unsplash}')"></a></div>
               </div>
             </details>
@@ -586,7 +289,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   
   <h3>8. 自定义背景</h3>
   <details class="folding-tag" cyan><summary> 设置自定义背景 </summary>
-              <div class='content'>
+              <div class="content">
               <p><center><input type="text" id="pic-link" size="70%" maxlength="1000" placeholder="请输入有效的图片链接，如 https://source.fomal.cc/img/home_bg.webp"></center></p><p><center><button type="button" onclick="getPicture()" style="background:var(--theme-color);width:35%;padding: 5px 0px 7px 0px;border-radius:30px;color:white;line-height:2;">🌈切换背景🌈</button></center></p>
               </div>
             </details>
@@ -652,23 +355,4 @@ if (localStorage.getItem("reset_4") == undefined) {
   function winResize() {
     try {
       var offsetWid = document.documentElement.clientWidth;
-      if (offsetWid <= 768) {
-        winbox.resize(offsetWid * 0.95 + "px", "90%").move("center", "center");
-      } else {
-        winbox.resize(offsetWid * 0.6 + "px", "70%").move("center", "center");
-      }
-    } catch (err) {
-      // console.log("Pjax毒瘤抽风运行winResize方法🙄🙄🙄");
-    }
-  }
-  
-  // 切换状态，窗口已创建则控制窗口显示和隐藏，没窗口则创建窗口
-  function toggleWinbox() {
-    if (document.querySelector("#meihuaBox")) {
-      winbox.toggleClass("hide");
-    } else {
-      createWinbox();
-    };
-  }
-  
-  /* 美化模块 end */
+      if (offsetWid </=></=>
